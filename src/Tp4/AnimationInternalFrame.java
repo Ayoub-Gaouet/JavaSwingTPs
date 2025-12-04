@@ -21,7 +21,7 @@ public class AnimationInternalFrame extends JInternalFrame {
 
     public AnimationInternalFrame() {
         super("Animation", true, true, true, true);
-        this.setSize(1000, 700);
+        this.setSize(1500, 700);
         this.setDefaultCloseOperation(JInternalFrame.HIDE_ON_CLOSE);
 
         JButton btnstart, btnstop;
@@ -29,9 +29,19 @@ public class AnimationInternalFrame extends JInternalFrame {
         btnstop = new JButton("stop");
         btnstart = new JButton("start");
 
-        JPanel pn = new JPanel();
-        pn.add(btnstart);
-        pn.add(btnstop);
+        JPanel pn = new JPanel(new BorderLayout());
+        JPanel btnPanel = new JPanel();
+        btnPanel.add(btnstart);
+        btnPanel.add(btnstop);
+        pn.add(btnPanel, BorderLayout.WEST);
+
+        JLabel lblClock = new JLabel("Time");
+        lblClock.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 20));
+        pn.add(lblClock, BorderLayout.EAST);
+
+        ClockThread clockThread = new ClockThread(lblClock);
+        clockThread.start();
+
         this.add(pn, BorderLayout.NORTH);
 
         pCenter = new MonPanneau();
