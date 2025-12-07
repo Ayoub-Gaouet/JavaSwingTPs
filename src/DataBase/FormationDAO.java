@@ -2,11 +2,11 @@ package DataBase;
 
 import java.sql.*;
 
-public class EtudiantDAO {
+public class FormationDAO {
     Connection con = null;
     Statement st = null;
 
-    public EtudiantDAO() {
+    public FormationDAO() {
         // Chargement driver
         try {
             Class.forName(DataBaseConfig.DB_DRIVER);
@@ -34,16 +34,16 @@ public class EtudiantDAO {
         }
     }
 
-    public int insertEtudiant(int cin, String nom, String prenom, Double moyenne) {
-        // Execution des requetes d'insertions
-        String req_insertion = "insert into etudiant values (?,?,?,?)";
-        if (con != null) {
-            try (PreparedStatement ps = con.prepareStatement(req_insertion)) {
-                ps.setInt(1, cin);
-                ps.setString(2, nom);
-                ps.setString(3, prenom);
-                ps.setDouble(4, moyenne);
+    public int insertFormation(String titre,String formateur, Integer heures_total, Integer heures_realisees, String statut) {
+        String req = "INSERT INTO Formation (titre, formateur, heures_total, heures_realisees, statut) VALUES (?,?,?,?,?)";
 
+        if (con != null) {
+            try (PreparedStatement ps = con.prepareStatement(req)) {
+                ps.setString(1, titre);
+                ps.setString(2, formateur);
+                ps.setInt(3, heures_total);
+                ps.setInt(4, heures_realisees);
+                ps.setString(5, statut);
                 int a = ps.executeUpdate();
                 System.out.println("inserted ...");
 
@@ -56,12 +56,11 @@ public class EtudiantDAO {
         return 0;
     }
 
-    public int deleteEtudiant(int cin) {
-        // supprime l'étudiant identifié par son cin
-        String req_delete = "DELETE FROM etudiant WHERE cin = ?";
+    public int deleteFormation(int id) {
+        String req_delete = "DELETE FROM Formation WHERE id = ?";
         if (con != null) {
             try (PreparedStatement ps = con.prepareStatement(req_delete)) {
-                ps.setInt(1, cin);
+                ps.setInt(1, id);
                 int affected = ps.executeUpdate();
                 System.out.println("delete: " + affected + " row(s) affected.");
                 return affected;
@@ -73,16 +72,48 @@ public class EtudiantDAO {
         }
         return 0;
     }
+    public static String changeStatus(int heures_realisees, int heures_total) {
+        if (heures_realisees == 0){
+            return "Non Débutée";
+        }
+        if ((0<heures_realisees )&& (heures_realisees<heures_total)){
+            return "En cours";
+        }
+        if (heures_realisees==heures_total){
+            return "Terminé";
+        }
+        return "";
+    }
 
-    public int modifierEtudiant(int cin, String nom, String prenom, double moyenne) {
-        // modifier les données des étudiants
-        String req_update = "UPDATE etudiant SET nom = ?, prenom = ?, moyenne = ? WHERE cin = ?";
+    public int updateFormation(int id, String formateur ,int heures_realisees, int heures_total) {
+        String statut = changeStatus(heures_realisees,heures_total);
+        String req = "UPDATE Formation SET formateur = ?, heures_realisees = ?, statut = ? WHERE id_formation = ?";
+
+        if (con != null) {
+            try (PreparedStatement ps = con.prepareStatement(req)) {
+                System.out.println(heures_realisees + " " + heures_total);
+                ps.setString(1, formateur);
+                ps.setInt(2, heures_realisees);
+                ps.setString(3, statut);
+                ps.setInt(4, id);
+                return ps.executeUpdate();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return 0;
+    }
+    public int modifierFormation(String titre,String formateur, Integer heures_total, Integer heures_realisees) {
+        String statut = changeStatus(heures_realisees,heures_total);
+        String req_update = "UPDATE Formation SET titre = ?, formateur = ?, heures_total = ?, heures_realisees = ?,statut = ? WHERE id_formation = ?";
         if (con != null) {
             try (PreparedStatement ps = con.prepareStatement(req_update)) {
-                ps.setString(1, nom);
-                ps.setString(2, prenom);
-                ps.setDouble(3, moyenne);
-                ps.setInt(4, cin);
+                ps.setString(1, titre);
+                ps.setString(2, formateur);
+                ps.setInt(3, heures_total);
+                ps.setInt(4, heures_realisees);
+                ps.setString(5, statut);
+
 
                 int affected = ps.executeUpdate();
                 System.out.println("update: " + affected + " row(s) affected.");
@@ -96,7 +127,8 @@ public class EtudiantDAO {
         return 0;
     }
 
-    public ResultSet selectEtudiant(String req_selection) {
+
+    public ResultSet selectFormation(String req_selection) {
         if (st != null) {
             try {
                 ResultSet rs = st.executeQuery(req_selection);

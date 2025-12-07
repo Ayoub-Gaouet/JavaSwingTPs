@@ -1,19 +1,24 @@
-package DS.V_Formation;
+package Ds;
 
+import DataBase.FormationDAO;
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.sql.ResultSet;
 
 public class FormationManager extends JFrame {
 
+    FormationDAO dao = new FormationDAO();
     JTable jtable;
     JLabel lbIdFormation, lbTitre, lbFormateur, lbHeuresTotal, lbHeuresRealisees, lbStatut;
     JTextField tfIdFormation, tfTitre, tfFormateur, tfHeuresTotal, tfHeuresRealisees;
     JComboBox<String> cbStatut;
     JButton btnIncrement, btnValider;
     JCheckBox cbboxFiltrer;
-
+    MyFormationTableModel model;
     public FormationManager() {
         this.setTitle("Gestion Formations");
         this.setSize(1100, 800);
@@ -90,8 +95,37 @@ public class FormationManager extends JFrame {
         this.add(psouth, BorderLayout.SOUTH);
 
         // JTable
-        jtable = new JTable();
+        ResultSet rs = dao.selectFormation("select * from Formation");
+        model = new MyFormationTableModel(rs, dao);
+        jtable = new JTable(model);
         JScrollPane scroll = new JScrollPane(jtable);
+        jtable.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                if (e.isPopupTrigger()) {
+                    showPopup(e);
+                }
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                if (e.isPopupTrigger())
+                    showPopup(e);
+            }
+
+            private void showPopup(MouseEvent e) {
+                int row = jtable.rowAtPoint(e.getPoint());
+                if (row >= 0) {
+                    jtable.setRowSelectionInterval(row, row);
+                } else {
+                    jtable.clearSelection();
+                }
+                // Instancier et afficher le menu contextuel pour la table
+                MyPopupMenu menu = new MyPopupMenu(jtable, model);
+                menu.show(e.getComponent(), e.getX(), e.getY());
+            }
+        });
+
         scroll.setBorder(BorderFactory.createTitledBorder("Liste des formations"));
         add(scroll, BorderLayout.CENTER);
 

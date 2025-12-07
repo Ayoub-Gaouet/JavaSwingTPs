@@ -8,10 +8,14 @@ public class CurriculumVitae extends JInternalFrame {
     JButton btnVal, btnQuitter;
 
     public CurriculumVitae() {
+        super("Curriculum Vitae",
+                true,
+                true,
+                true,
+                true);
         // Creation de l'interface IHM
         this.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
         this.setSize(800, 600);
-        this.setTitle("Projet Java");
 
         // positionnement
         this.setLayout(new BorderLayout());

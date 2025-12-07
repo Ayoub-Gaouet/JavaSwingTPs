@@ -82,41 +82,22 @@ public class MyEtudiantTableModel extends AbstractTableModel {
         return -1;
     }
 
+    // Quand l'utilisateur modifie la moyenne dans la JTable
     @Override
     public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
-        try {
-            int cinIndex = columnNameToIndex("cin");
-            int nomIndex = columnNameToIndex("nom");
-            int prenomIndex = columnNameToIndex("prenom");
-            // fallback si les noms de colonnes ne sont pas trouvés
-            if (cinIndex == -1)
-                cinIndex = 0;
-            if (nomIndex == -1)
-                nomIndex = 1;
-            if (prenomIndex == -1)
-                prenomIndex = 2;
 
-            Object[] row = data.get(rowIndex);
-            int cin = Integer.parseInt(row[cinIndex].toString());
-            String nom = row[nomIndex].toString();
-            String prenom = row[prenomIndex].toString();
+        // Récupération des anciennes valeurs
+        int cin = Integer.parseInt(data.get(rowIndex)[0] + "");
+        String nom = data.get(rowIndex)[1] + "";
+        String prenom = data.get(rowIndex)[2] + "";
+        double moyenne = Double.parseDouble(aValue + "");
 
-            double moyenne;
-            if (aValue instanceof Number) {
-                moyenne = ((Number) aValue).doubleValue();
-            } else {
-                moyenne = Double.parseDouble(aValue.toString().trim());
-            }
+        // Mise à jour dans la BDD
+        int a = dao.modifierEtudiant(cin, nom, prenom, moyenne);
 
-            int result = dao.modifierEtudiant(cin, nom, prenom, moyenne);
-            if (result > 0) {
-                data.get(rowIndex)[columnIndex] = moyenne;
-                fireTableCellUpdated(rowIndex, columnIndex);
-            }
-        } catch (NumberFormatException e) {
-            e.printStackTrace();
-        } catch (Exception e) {
-            e.printStackTrace();
+        // Si OK → on met à jour dans l'IHM
+        if (a > 0) {
+            data.get(rowIndex)[columnIndex] = aValue;
         }
     }
 

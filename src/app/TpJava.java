@@ -6,8 +6,8 @@ import java.awt.*;
 public class TpJava extends JFrame {
     // Declaration des variables
     JMenuBar menuBar;
-    JMenu menuTp1, menuTp2, menuTp3, menuTp4;
-    JMenuItem itemFlow, itemGrid, itemBorder, itemCv, itemGp, itemEtudiant, itemAnimation;
+    JMenu menuTp1, menuTp2, menuTp3, menuTp4, menuDs;
+    JMenuItem itemFlow, itemGrid, itemBorder, itemCv, itemGp, itemEtudiant, itemAnimation, itemGf;
     JDesktopPane desktop;
 
     public TpJava() {
@@ -42,6 +42,13 @@ public class TpJava extends JFrame {
         menuTp4.add(itemAnimation);
         menuBar.add(menuTp4);
 
+        menuDs= new JMenu("Ds");
+        itemGf = new JMenuItem("GF");
+        menuDs.add(itemGf);
+        menuBar.add(menuDs);
+
+
+
         this.setJMenuBar(menuBar);
 
         desktop = new JDesktopPane();
@@ -57,6 +64,7 @@ public class TpJava extends JFrame {
         itemCv.addActionListener(new EcouteurMenu(this));
         itemEtudiant.addActionListener(new EcouteurMenu(this));
         itemAnimation.addActionListener(new EcouteurMenu(this));
+        itemGf.addActionListener(new EcouteurMenu(this));
 
     }
 }

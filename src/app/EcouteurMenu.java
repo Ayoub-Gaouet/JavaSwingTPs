@@ -2,6 +2,8 @@ package app;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
+import Ds.FormationManager;
 import Tp1.*;
 import Tp2.CurriculumVitae.CurriculumVitae;
 import Tp2.GestionProfils.GProfils;
@@ -49,6 +51,11 @@ public class EcouteurMenu implements ActionListener {
         }
         if (e.getSource() == tp.itemAnimation) {
             AnimationInternalFrame anim = new AnimationInternalFrame();
+            anim.setVisible(true);
+            tp.desktop.add(anim);
+        }
+        if (e.getSource() == tp.itemAnimation) {
+            FormationManager anim = new FormationManager();
             anim.setVisible(true);
             tp.desktop.add(anim);
         }

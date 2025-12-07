@@ -1,11 +1,13 @@
-package Tp3;
+package Ds;
+
+import Tp3.MyEtudiantTableModel;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class MyPopupMenu extends JPopupMenu {
-    public MyPopupMenu(final JTable table, final MyEtudiantTableModel model) {
+    public MyPopupMenu(final JTable table, final MyFormationTableModel model) {
         JMenuItem jmi_supprimer = new JMenuItem("Supprimer");
 
         this.add(jmi_supprimer);
