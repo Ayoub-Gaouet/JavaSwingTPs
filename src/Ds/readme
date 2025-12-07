@@ -1,0 +1,16 @@
+A executer sous votre base de données:
+
+CREATE TABLE Formation (
+    id_formation INT PRIMARY KEY AUTO_INCREMENT,
+    titre VARCHAR(60) NOT NULL,
+    formateur VARCHAR(60) NOT NULL,
+    heures_total INT NOT NULL,
+    heures_realisees INT NOT NULL,
+    statut VARCHAR(20)
+);
+-- Insertion de données dans la table "Formation"
+INSERT INTO Formation (titre, formateur, heures_total, heures_realisees, statut) VALUES
+('Java Avancé', 'Mr. Karim', 40, 10, 'En cours'),
+('Développement Web', 'Mme. Sonia', 30, 30, 'Terminée'),
+('Test Logiciel', 'Mme Eya', 25, 0, 'Non débutée'),
+('Intelligence Artificielle', 'Mme. Yosra', 50, 22, 'En cours');
